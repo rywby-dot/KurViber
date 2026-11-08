@@ -1,22 +1,28 @@
 # KurViber✅
 ## ⚠️WARNING⚠️
-ONLY FOR **ROOTED** DEVICES
-IT WILL **NOT** WORK **WITHOUT** ROOT
-Made with AI (Astra 6, Sol 6.1)
+### ONLY FOR **ROOTED** DEVICES!
+### IT WILL **NOT** WORK **WITHOUT** ROOT!
+#### Made with AI (Astra 6, Sol 6.1)
 
-NoAds✅
-NoTelemetry✅
-NoChatGPT✅
-NoSlop✅
-NoBottomTabs✅
-NoTopTabs✅
-CustomHeaderName✅
-NoFAB✅
-...and more✅✅
-(Each option can be manually turned on or off)
+- NoAds✅
+- NoTelemetry✅
+- NoChatGPT✅
+- NoSlop✅
+- NoBottomTabs✅
+- NoTopTabs✅
+- CustomHeaderName✅
+- NoFAB✅
+- ...and more✅✅
+- *(Each option can be manually turned on or off)*
+
+#
+
+<img width="315" height="700" alt="Screenshot_20261108-153246" src="https://github.com/user-attachments/assets/51ef5d18-03ba-41dd-8333-bdfbe46106d0" /> <img width="315" height="700" alt="Screenshot_20261108-162155" src="https://github.com/user-attachments/assets/df729a6a-af50-44a8-93c0-c21ba1e72559" />
 
 
-KurViber✅ is an Xposed module for **Viber 29.3.1.0 (1290301)** (but it should work with other versions too). It removes ads and unwanted UI, customizes appearance, and blocks known trackers
+#
+
+**KurViber✅** is an Xposed module for **Viber 29.3.1.0 (1290301)** (but it should work with other versions too). It removes ads and unwanted UI, customizes appearance, and blocks known trackers
 
 1. Install the APK from **Releases**
 2. Enable the module in **Vector/LSPosed**, selecting only **Viber** as its scope
@@ -24,3 +30,7 @@ KurViber✅ is an Xposed module for **Viber 29.3.1.0 (1290301)** (but it should 
 4. Open **Viber → Settings → Viber NoSlop**. The gear button opens "More" tab
 
 Restart Viber after changing settings. Tested with **Vector 2.2 (3080), Android 17 (Nothing Phone 3, NOS 5, KernelSU-Next, NeoZygisk)**
+
+#
+
+<img width="275" height="998" alt="Screenshot_20261108-162133" src="https://github.com/user-attachments/assets/bf174e8b-6fcb-48e9-a04e-079655bb15a3" />
