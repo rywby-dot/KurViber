@@ -1,0 +1,77 @@
+# Build products and local caches
+.gradle/
+**/build/
+/dist/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.apks
+*.apkm
+*.xapk
+*.idsig
+*.dex
+*.class
+*.aar
+*.zip
+
+# Local Android SDK / IDE configuration
+local.properties
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+
+# Signing material and credentials
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+keystore.properties
+signing.properties
+.env
+.env.*
+!.env.example
+*.credentials
+
+# Private inputs, reverse-engineering output and device captures
+/analysis/
+/input/
+/inputs/
+/apks/
+/screenshots/
+/captures/
+/logs/
+*.log
+*.hprof
+*.trace
+adb*.txt
+logcat*.txt
+Screenshot_*
+
+# Agent-local state
+.codex/
+.agents/
+.claude/
+.aws/
+
+# Python / editor / OS temporary files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Required build dependencies: keep the wrapper and compile-only Xposed API.
+!gradle/wrapper/gradle-wrapper.jar
+!app/libs/api-82.jar

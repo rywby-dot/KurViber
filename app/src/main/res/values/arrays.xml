@@ -1,0 +1,1 @@
+<resources><string-array name="xposed_scope"><item>com.viber.voip</item></string-array></resources>
