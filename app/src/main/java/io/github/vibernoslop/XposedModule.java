@@ -19,7 +19,7 @@ public final class XposedModule implements IXposedHookLoadPackage {
                 }
                 Context context = (Context) p.args[0];
                 Options.init(context);
-                HookLog.add("Build 0.2.3 / toolbar diagnostics revision 1");
+                HookLog.add("Build 0.4.1 / toolbar diagnostics revision 1");
                 for (Options.Option option : Options.Option.values()) HookLog.add("Option " + option.name() + "=" + Options.on(option));
                 HookLog.add("Loaded in " + pkg.processName);
                 ClassLoader loader = pkg.classLoader;
@@ -29,7 +29,7 @@ public final class XposedModule implements IXposedHookLoadPackage {
                 safe("privacy", () -> new PrivacyHooks(loader).install());
                 if ("com.viber.voip".equals(pkg.processName)) {
                     safe("ad adapters", () -> AdAdapterHooks.install(context, loader));
-                    safe("appearance", () -> Appearance.install(loader));
+                    safe("home icons", () -> HomeIconColors.install(loader));
                     safe("UI", () -> UiHooks.install(loader));
                     safe("menus", () -> MenuHooks.install(context, loader));
                     safe("settings", () -> SettingsEntry.install(loader));

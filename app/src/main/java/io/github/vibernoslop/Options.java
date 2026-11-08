@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 final class Options {
     static final String DEFAULT_TITLE = "KurViber✅";
-    static final String DEFAULT_ACCENT = "#ffffff";
     enum Option {
         ADS_CHATS("Ads Chats", true),
         ADS_MORE("Ads More", true),
@@ -30,9 +29,7 @@ final class Options {
         HIDE_FAB("Hide floating action buttons", true),
         SEARCH_FAB("Use search button for the current floating action", true),
         CAMERA("Hide toolbar camera", true),
-        NO_BLUR("Disable blur", true),
-        FLAT("Flatten purple gradients", true),
-        ACCENT("Use custom accent color", true),
+        WHITE_HOME_ICONS("White icons on the home screen only", true),
         NAVBAR("Navbar", true);
         final String title;
         final boolean initial;

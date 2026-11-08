@@ -34,20 +34,14 @@ final class SettingsUi {
         title.setHint("Custom app title (empty = original)");
         title.setText(Options.text("title", Options.DEFAULT_TITLE));
         content.addView(title);
-        android.widget.EditText accent = new android.widget.EditText(activity);
-        accent.setHint("Accent color: #RRGGBB");
-        accent.setText(Options.text("accent", Options.DEFAULT_ACCENT));
-        content.addView(accent);
         ScrollView scroll = new ScrollView(activity);
         scroll.addView(content);
         new AlertDialog.Builder(activity).setTitle("Viber NoSlop")
             .setView(scroll).setPositiveButton("Done", (d, w) -> {
                 Options.setText("title", title.getText().toString());
-                try { Color.parseColor(accent.getText().toString()); Options.setText("accent", accent.getText().toString()); }
-                catch (IllegalArgumentException e) { Toast.makeText(activity, "Invalid color", Toast.LENGTH_SHORT).show(); }
             })
             .setNeutralButton("Diagnostics", (dialog, which) -> {
-                String report = "Viber NoSlop 0.2.3\n" + HookLog.report() + "\n" + RuntimeDiagnostics.report(activity);
+                String report = "Viber NoSlop 0.4.1\n" + HookLog.report() + "\n" + RuntimeDiagnostics.report(activity);
                 new AlertDialog.Builder(activity).setTitle("Hook diagnostics")
                     .setMessage(report).setPositiveButton("Close", null)
                     .setNeutralButton("Copy", (d, w) -> {

@@ -29,7 +29,7 @@ Preserve all module source and files necessary to reproduce the build.
 - This module uses Vector's legacy Xposed compatibility API 82; it is not a modern
   libxposed API 102 module. Do not accidentally mix both entry-point formats.
 - Module minSdk 32, compileSdk/targetSdk 35, Java source/target 11.
-- Current module version: 0.2.3, versionCode 5.
+- Current module version: 0.4.1, versionCode 12.
 - Older APK 29.0.1 was used to check AI discovery only. Do not claim full support for
   that version or for arbitrary future Viber versions.
 
@@ -104,8 +104,7 @@ live midway through layout by replacing the snapshot with preference reads on ev
 String settings currently read saved values directly. Discovery caches use separate
 preferences and APK path/length/mtime to invalidate results after Viber updates.
 
-All switches default to true. DEFAULT_ACCENT is exactly #ffffff. DEFAULT_TITLE is
-exactly KurViber✅, including case and emoji. Previously saved user choices take
+All switches default to true. DEFAULT_TITLE is exactly KurViber✅. Previously saved user choices take
 precedence; do not silently overwrite them on upgrade. Scope and Android identifiers
 must remain compatible unless the owner requests migration.
 
@@ -145,19 +144,22 @@ fab_open_keypad and fab_compose_video_call. Keep Viber's original click behavior
 of rebuilding its destinations with guessed intents. Hiding FAB and transferring its
 action are separate options, both enabled by default.
 
-### Appearance
+### Appearance (current scope)
 
-Appearance processes purple GradientDrawable backgrounds, GradientImageView drawable
-masks and theme TypedArray color reads. Purple classification uses hue/saturation;
-do not recolor every image, message bubble, avatar or attachment. FLAT removes gradients;
-ACCENT uses the selected color. NO_BLUR separately bypasses blur rendering in
-DynamicBlurLayout and BlurFrameLayout using the normal base drawing path, preserving
-children. Gradients are not the same thing as blur.
-
-The custom title must replace Viber's styled/image-span title after later Viber
-updates, not merely set an initial title that gets overwritten. Avoid infinite layout
-loops: only apply changed title/logo state. Appearance scan errors must be isolated
-so they cannot prevent HomeControls or other UI hooks from installing.
+All global color customization was removed at the owner's request in 0.4.0. Do not
+restore accent fields, incoming/outgoing message colors, gradient flattening, contrast
+palettes, blur bypasses, RenderEffect shaders or global resource/text color hooks.
+The WHITE_HOME_ICONS option is the only color control and defaults to true.
+HomeIconColors requires both HomeActivity and an ancestor resource entry name of
+activity_home_toolbar, bottom_nav_bar or fab_container. More content, chats, group
+settings, reactions, names, avatar borders and all other screens keep stock colors.
+Toolbar ActionMenuItemView icons are compound drawables. FAB layer 0 is its stock
+background; only foreground layers are whitened. Do not tint entire FAB composites.
+The gear is white when the option is enabled and uses its original purple gradient
+when disabled. Custom title and unrelated hiding/privacy switches remain available.
+Old color preferences may remain in Viber storage but are ignored; do not clear Viber
+data. Restart Viber to drop old in-memory hooks. HomeIconScopeCheck verifies exclusion
+of unrelated screens/containers. Device visual verification is still needed.
 
 ### AI and obfuscation resistance
 
@@ -234,3 +236,20 @@ JAR. Before preparing a public change use git status, git diff --check and
 .gitignore does not remove already tracked secrets/artifacts. Do not stage private
 inputs or remove local keys to clean the repository. Source archives, if requested,
 must omit build, dist, caches, private keys and original Viber data.
+
+
+## 0.4.0 removal of color experiments
+
+The owner explicitly abandoned the 0.3.x global color experiments after repeated
+visual failures. Scope is now ONLY white FAB glyphs, home toolbar icons and bottom
+navigation icons through one switch; all other colors and gradients are stock.
+Removed obsolete palette classes/tests and their UI fields, and NO_BLUR/FLAT/ACCENT
+options. Do not carry forward historical defaults for outgoing/incoming colors.
+
+## 0.4.1 search tint
+
+Search still retained its gradient in 0.4.0. HomeControls now updates the actual
+menu_search MenuItem icon tint and switches its mode from stock MULTIPLY to SRC_IN.
+HomeIconColors handles both absolute and relative compound drawables and AppCompat
+support compound tint. This remains scoped to the home toolbar and WHITE_HOME_ICONS.
+Do not restore global color/resource hooks to fix one action-menu icon.

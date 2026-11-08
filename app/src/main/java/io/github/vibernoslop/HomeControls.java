@@ -32,6 +32,13 @@ final class HomeControls {
     HookLog.add("Home: gear menu action installed");
    }
    MenuItem search=menu.findItem(resource(a,"menu_search"));
+   if(search!=null&&Options.on(Options.Option.WHITE_HOME_ICONS)){
+    android.content.res.ColorStateList tint=search.getIconTintList();
+    if(tint==null||tint.getDefaultColor()!=Color.WHITE)search.setIconTintList(android.content.res.ColorStateList.valueOf(Color.WHITE));
+    if(search.getIconTintMode()!=PorterDuff.Mode.SRC_IN)search.setIconTintMode(PorterDuff.Mode.SRC_IN);
+    Drawable icon=search.getIcon();if(icon!=null){icon.mutate().setTintMode(PorterDuff.Mode.SRC_IN);icon.setTint(Color.WHITE);icon.setColorFilter(Color.WHITE,PorterDuff.Mode.SRC_IN);}
+    HookLog.add("Home: search menu icon forced white / SRC_IN");
+   }
    if(search!=null&&Options.on(Options.Option.SEARCH_FAB))wire(toolbar,a,search);
   } catch(Throwable e){HookLog.add("Home toolbar: "+e.getClass().getSimpleName()+": "+e.getMessage());}
  }
@@ -53,14 +60,14 @@ final class HomeControls {
     HookLog.add("Home: no active floating action available on this screen");
    });
   }
-  Appearance.apply(v);
+  HomeIconColors.apply(v);
   if(v instanceof ViewGroup)for(int i=0;i<((ViewGroup)v).getChildCount();i++)wire(((ViewGroup)v).getChildAt(i),a,search);
  }
  static final class Gear extends Drawable {
   final Paint paint=new Paint(3);
   public void draw(Canvas c){Rect b=getBounds();float x=b.exactCenterX(),y=b.exactCenterY(),r=Math.min(b.width(),b.height())*.32f;
-   paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(r*.26f);paint.setColor(Appearance.accent());
-   if(!Options.on(Options.Option.FLAT))paint.setShader(new LinearGradient(b.left,b.top,b.right,b.bottom,new int[]{Appearance.accent(),Appearance.accentLight()},null,Shader.TileMode.CLAMP));else paint.setShader(null);
+   paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(r*.26f);paint.setColor(Options.on(Options.Option.WHITE_HOME_ICONS)?Color.WHITE:0xff7360f2);
+   if(!Options.on(Options.Option.WHITE_HOME_ICONS))paint.setShader(new LinearGradient(b.left,b.top,b.right,b.bottom,new int[]{0xff7360f2,0xffa060ff},null,Shader.TileMode.CLAMP));else paint.setShader(null);
    c.drawCircle(x,y,r*.72f,paint);c.drawCircle(x,y,r*.25f,paint);
    for(int i=0;i<8;i++){double t=i*Math.PI/4;c.drawLine(x+(float)Math.cos(t)*r*.8f,y+(float)Math.sin(t)*r*.8f,x+(float)Math.cos(t)*r*1.12f,y+(float)Math.sin(t)*r*1.12f,paint);}
   }

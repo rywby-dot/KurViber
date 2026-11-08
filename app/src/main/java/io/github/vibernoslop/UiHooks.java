@@ -68,7 +68,7 @@ final class UiHooks {
     static void scan(View view) {
         if (view == null) return;
         String id = name(view);
-        try { Appearance.apply(view); } catch (Throwable e) { HookLog.add("Appearance scan failed: " + e.toString()); }
+        HomeIconColors.apply(view);
         Options.Option option = UiRules.id(id);
         if (option != null && !marked.containsKey(view)) mark(view, option);
         if ("activity_home_toolbar".equals(id) && !launchers.containsKey(view)) {

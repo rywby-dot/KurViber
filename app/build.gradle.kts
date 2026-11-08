@@ -6,8 +6,8 @@ android {
         applicationId = "io.github.vibernoslop"
         minSdk = 32
         targetSdk = 35
-        versionCode = 5
-        versionName = "0.2.3"
+        versionCode = 12
+        versionName = "0.4.1"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

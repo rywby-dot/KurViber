@@ -11,7 +11,7 @@ public final class UiRulesCheck {
         check(UiRules.id("folder_tabs") == FOLDERS, "folder tabs");
         check(UiRules.id("bottom_nav_tab_messages") == TAB_CHATS, "chat tab option");
         for (Options.Option option : Options.Option.values()) check(Options.on(option), "enabled default: " + option);
-        check(Options.DEFAULT_TITLE.equals("KurViber✅") && Options.DEFAULT_ACCENT.equals("#ffffff"), "appearance defaults");
+        check(Options.DEFAULT_TITLE.equals("KurViber✅"), "appearance defaults");
         check(UiRules.id("bottom_nav_tab_gpt_chat") == AI, "AI tab disabled with integration");
         check(UiRules.layout("conversation_welcome_banner_layout") == null, "do not hide arbitrary banners");
         check(UiRules.id("adButton") == null, "do not hide an arbitrary inner view");

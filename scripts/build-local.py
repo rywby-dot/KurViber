@@ -27,7 +27,7 @@ shutil.rmtree(BUILD / 'dex')
 main = ROOT / 'app/src/main'
 run(TOOLS / 'aapt', 'package', '-f', '-M', main / 'AndroidManifest.xml',
     '-S', main / 'res', '-A', main / 'assets', '-I', ANDROID,
-    '-J', BUILD / 'generated', '-F', BUILD / 'resources.apk', '--version-code', '5', '--version-name', '0.2.3')
+    '-J', BUILD / 'generated', '-F', BUILD / 'resources.apk', '--version-code', '12', '--version-name', '0.4.1')
 sources = sorted((main / 'java').rglob('*.java'))
 run('javac', '-encoding', 'UTF-8', '-source', '11', '-target', '11',
     '-classpath', f'{ANDROID}{os.pathsep}{ROOT / "app/libs/api-82.jar"}',
@@ -45,6 +45,6 @@ if not KEY.exists():
         '-keypass', 'android', '-alias', 'viber-noslop', '-keyalg', 'RSA', '-keysize', '3072',
         '-validity', '10000', '-dname', 'CN=Viber NoSlop local development')
 run(TOOLS / 'apksigner', 'sign', '--ks', KEY, '--ks-pass', 'pass:android',
-    '--key-pass', 'pass:android', '--out', OUT / 'viber-noslop-0.2.3.apk', BUILD / 'aligned.apk')
-run(TOOLS / 'apksigner', 'verify', '--verbose', OUT / 'viber-noslop-0.2.3.apk')
-print(OUT / 'viber-noslop-0.2.3.apk')
+    '--key-pass', 'pass:android', '--out', OUT / 'viber-noslop-0.4.1.apk', BUILD / 'aligned.apk')
+run(TOOLS / 'apksigner', 'verify', '--verbose', OUT / 'viber-noslop-0.4.1.apk')
+print(OUT / 'viber-noslop-0.4.1.apk')

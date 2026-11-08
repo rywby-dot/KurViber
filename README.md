@@ -11,10 +11,7 @@ NoSlop✅
 NoBottomTabs✅
 NoTopTabs✅
 CustomHeaderName✅
-CustomColors✅
-NoGradient✅
 NoFAB✅
-Customization✅✅✅
 ...and more✅✅
 (Each option can be manually turned on or off)
 
