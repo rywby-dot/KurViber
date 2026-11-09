@@ -24,6 +24,10 @@
 
 **KurViber✅** is an Xposed module for **Viber 29.3.1.0 (1290301)** (but it should work with other versions too). It removes ads and unwanted UI, customizes appearance, and blocks known trackers
 
+### Works on: 
+ - 29.4.0.0✅
+
+#
 1. Install the APK from **Releases**
 2. Enable the module in **Vector/LSPosed**, selecting only **Viber** as its scope
 3. Force-stop Viber and reopen it
