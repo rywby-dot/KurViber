@@ -38,21 +38,43 @@ final class ExperimentHooks {
         if (target == null) throw new IllegalStateException("Experiment mapper signature changed");
         XposedBridge.hookMethod(target, new XC_MethodHook() {
             @Override protected void beforeHookedMethod(MethodHookParam p) {
-                if (!Options.on(Options.Option.AI)) return;
+                if (!Options.on(Options.Option.AI) && !Options.on(Options.Option.POLISH_MESSAGE)
+                    && !Options.on(Options.Option.IMAGE_REMIX)) return;
                 try {
                     String key = findKey(p.thisObject);
-                    // Each of these has a nullable disabled result in the inspected APK.
-                    // Do not null arbitrary experiments: many have non-null domain models.
-                    if ("core_ai_chatgptintegration".equals(key) || "core_ai_chatgpttab".equals(key)
-                        || "core_ai_chatgpttabv2".equals(key)) {
-                        p.setResult(null);
-                        HookLog.add("AI experiment disabled: " + key);
-                    }
-                } catch (ReflectiveOperationException e) { HookLog.add("AI key lookup failed: " + e.getClass().getSimpleName()); }
+                    Options.Option option = AiFeatureRules.experiment(key);
+                    if (option == null || !Options.on(option)) return;
+                    // ChatGPT and Writing Assistant explicitly use null as disabled.
+                    // Image Remix requires the factory's non-null Disabled default.
+                    Object disabled = option == Options.Option.IMAGE_REMIX
+                        ? remixDefault(p.thisObject) : null;
+                    p.setResult(disabled);
+                    HookLog.add("AI experiment disabled: " + key);
+                } catch (ReflectiveOperationException e) { HookLog.add("AI experiment override skipped: " + e.getClass().getSimpleName() + ": " + e.getMessage()); }
             }
         });
         cache.edit().putString("identity", identity).putString("experiment", type).apply();
         HookLog.add("AI experiment mapper: " + target.toGenericString());
+    }
+    private static Object remixDefault(Object mapper) throws ReflectiveOperationException {
+        Object match = null;
+        for (Field field : mapper.getClass().getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers()) || field.getType().isPrimitive()) continue;
+            field.setAccessible(true);
+            Object wrapper = field.get(mapper);
+            if (wrapper == null) continue;
+            boolean function = false;
+            for (Class<?> iface : wrapper.getClass().getInterfaces())
+                if (iface.getName().equals("kotlin.jvm.functions.Function1")) function = true;
+            if (!function) continue;
+            Object fallback = DisabledExperimentDefault.find(wrapper);
+            if (fallback == null) continue;
+            if (match != null && match != fallback)
+                throw new NoSuchFieldException("Ambiguous Image Remix disabled default");
+            match = fallback;
+        }
+        if (match == null) throw new NoSuchFieldException("Image Remix disabled default signature changed");
+        return match;
     }
     private static String findKey(Object mapper) throws IllegalAccessException {
         for (Field field : mapper.getClass().getDeclaredFields()) {
@@ -64,7 +86,7 @@ final class ExperimentHooks {
                 if (Modifier.isStatic(nested.getModifiers()) || nested.getType() != String.class) continue;
                 nested.setAccessible(true);
                 String value = (String) nested.get(object);
-                if (value != null && value.startsWith("core_ai_chatgpt")) return value;
+                if (AiFeatureRules.experiment(value) != null) return value;
             }
         }
         return null;

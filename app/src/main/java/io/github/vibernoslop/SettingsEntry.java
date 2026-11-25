@@ -31,7 +31,7 @@ final class SettingsEntry {
             wrapper.setTag("viber_noslop_settings_wrapper");
             wrapper.setOrientation(LinearLayout.VERTICAL);
             TextView entry = new TextView(activity);
-            entry.setText("Viber NoSlop  ›");
+            entry.setText("KurViber  ›");
             entry.setTextSize(18);
             int pad = (int) (20 * activity.getResources().getDisplayMetrics().density);
             entry.setPadding(pad, pad, pad, pad);
@@ -43,7 +43,7 @@ final class SettingsEntry {
             wrapper.addView(entry, new LinearLayout.LayoutParams(-1, -2));
             wrapper.addView(holder, new LinearLayout.LayoutParams(-1, 0, 1));
             parent.addView(wrapper, index, original);
-            HookLog.add("Settings: Viber NoSlop section inserted");
+            HookLog.add("Settings: KurViber section inserted");
         } catch (Throwable e) { HookLog.add("Settings entry unavailable: " + e.getClass().getSimpleName()); }
     }
 }

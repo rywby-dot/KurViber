@@ -5,8 +5,8 @@
 KurViber is a Java Xposed module for the original Viber Android application. It removes
 advertising rows without leaving reserved space, suppresses known telemetry paths,
 disables selected ChatGPT entry points, hides unwanted UI, and customizes the home
-screen. The public repository directory is KurViber. Internal identifiers still use
-Viber NoSlop / io.github.vibernoslop; this is intentional existing compatibility state.
+screen. The public repository directory is KurViber. Public app/module/settings branding is KurViber. Internal package io.github.vibernoslop
+and preference keys remain unchanged for update compatibility.
 
 Keep user-facing module UI, code identifiers, comments and diagnostics in English.
 Respond to the project owner in Russian. The short public README is intentionally in
@@ -29,7 +29,7 @@ Preserve all module source and files necessary to reproduce the build.
 - This module uses Vector's legacy Xposed compatibility API 82; it is not a modern
   libxposed API 102 module. Do not accidentally mix both entry-point formats.
 - Module minSdk 32, compileSdk/targetSdk 35, Java source/target 11.
-- Current module version: 0.4.1, versionCode 12.
+- Current module version: 0.5.3, versionCode 16.
 - Older APK 29.0.1 was used to check AI discovery only. Do not claim full support for
   that version or for arbitrary future Viber versions.
 
@@ -42,7 +42,7 @@ Build/static checks do not establish live behavior of changes made after device 
 ## Repository layout
 
 - app/src/main/java/io/github/vibernoslop/: implementation.
-- app/src/main/AndroidManifest.xml: legacy module metadata, launcher activity, scope.
+- app/src/main/AndroidManifest.xml: legacy module metadata, icon, scope; no activities.
 - app/src/main/assets/xposed_init: io.github.vibernoslop.XposedModule.
 - app/src/main/res/values/arrays.xml: scope restricted to com.viber.voip.
 - app/libs/api-82.jar: required compile-only Xposed API; keep in Git.
@@ -85,7 +85,7 @@ Versions are duplicated: update app/build.gradle.kts, scripts/build-local.py,
 scripts/check.py, the SettingsUi report label and XposedModule build diagnostic when
 bumping a release. Increment versionCode for each installable update. Verify the
 manifest inside the built APK rather than assuming the Gradle version was used by the
-offline build. Existing output naming uses viber-noslop-VERSION.apk; changing it needs
+offline build. Existing output naming uses KurViber-VERSION.apk; changing it needs
 coordinated script updates, not a blind global identifier rename.
 
 ## Architecture
@@ -125,9 +125,9 @@ Preserve navigation arrays/indices and Viber's normal adapter mappings.
 
 ### Home controls and settings
 
-SettingsEntry inserts a Viber NoSlop section above settingsFragmentHolder while keeping
+SettingsEntry inserts a KurViber section above settingsFragmentHolder while keeping
 the holder ID and parent layout constraints. SettingsUi opens the module options dialog.
-MainActivity is a setup-information launcher, not the authoritative preference editor.
+There is no MainActivity or launcher entry. Settings are available only inside Viber.
 
 HomeControls attaches to activity_home_toolbar and refreshes after toolbar layout,
 because Viber creates menu items asynchronously and resets its styled title. It uses
@@ -166,8 +166,9 @@ of unrelated screens/containers. Device visual verification is still needed.
 DexFinder is a small read-only DEX string-reference index with instruction/payload
 width handling. ExperimentHooks locates the mapper using the diagnostic anchor
 Too much time spent on mapping experiment= and validates a unique class/method shape.
-Only core_ai_chatgptintegration, core_ai_chatgpttab and core_ai_chatgpttabv2 are assigned
-null disabled results, verified nullable in the analyzed APK. Do not null arbitrary
+ChatGPT keys and core_ai_writingassistant use null disabled results, verified nullable
+in the analyzed APK. core_chats_imageremix must use its captured non-null Disabled
+default, validated by DisabledExperimentDefault. Do not null arbitrary
 experiment outputs: other feature consumers require non-null domain models.
 
 The mapper was pvw in 29.3.1 and rls in 29.0.1. These are analysis examples, not
@@ -253,3 +254,87 @@ menu_search MenuItem icon tint and switches its mode from stock MULTIPLY to SRC_
 HomeIconColors handles both absolute and relative compound drawables and AppCompat
 support compound tint. This remains scoped to the home toolbar and WHITE_HOME_ICONS.
 Do not restore global color/resource hooks to fix one action-menu icon.
+
+## 0.5.0 Polish message and Remix image switches
+
+Owner supplied two screenshots on 2026-11-25. Polish message is the Writing Assistant
+composer chip; Remix image is the CTA in the fullscreen media viewer. Additions use
+independent POLISH_MESSAGE and IMAGE_REMIX options, both defaulting to true. They
+are independent of AI/ChatGPT and TRANSLATE. SettingsUi renders Options automatically.
+
+UiRules hides the inflated polish_messages_stub/polish_messages_menu and writing
+assistant menu entry; never block ViewStub inflation itself. Image Remix hides the
+gallery include view_image_remix_cta, its btn_image_remix_cta layout root, remix FAB
+container, and inline remix button. Collapse only these controls, not fullscreen
+gallery, media content, message composer, or ordinary edit/share actions.
+
+AiFeatureRules recognizes only exact inspected experiment keys. Writing Assistant's
+core_ai_writingassistant nullable disabled config suppresses its feature/triggers;
+this toggle disables the Writing Assistant surface, not only an English text label.
+Image Remix's core_chats_imageremix has a non-null sealed Disabled model. Its mapper
+wrapper captures that default as an Object field. ExperimentHooks locates the wrapper
+by Function1 interface; DisabledExperimentDefault validates a unique stateless singleton
+whose toString is Disabled. Do not hardcode rdy/gvw or return null for Remix. On an
+ambiguous/changed shape, skip the experiment override and retain UI hiding as fallback.
+Do not override birthday/login auxiliary experiment models with guessed return types.
+
+Validation: UI resource existence, independent-key policy checks, captured-default
+identity/state/ambiguity tests, full APK build and signing. On-device testing of the
+two screenshots' screens remains necessary. Screenshots/decompiled Viber inputs stay
+outside the repository and source distributions.
+
+## 0.5.1 actual Polish message action pill
+
+Owner confirmed Remix hidden but Polish still present in 0.5.0. Runtime log showed
+the Writing Assistant experiment overridden and old polish_messages_stub hidden. The
+screenshot's actual Polish message text is wa_pill_polish_message, rendered separately
+inside ChatActionPillsRowView (Compose), not the old polish_messages_menu.
+
+WritingAssistantHooks intercepts setContent(List) on the retained row class (fallback:
+unique public void(List) method). WritingAssistantPillFilter reads the unique no-arg
+String getter from provider interfaces, irrespective of its obfuscated name, and
+removes only providers with exact key ai_writing_assistant. Original source list is
+not mutated; unrelated providers/order are retained; ambiguous or failing getters
+are preserved. Do not hide chat_action_pills_row wholesale: it also hosts book_link.
+The inspected Compose renderer emits no row padding/content for an empty list.
+
+Local original APK remains 29.3.1; owner log's renamed classes show a different build.
+Do not claim validation against their newer APK. Their advertising adapter hook also
+reports a renamed isAdAvailable method; that separate issue is not fixed in 0.5.1.
+Privacy and existing resource-based ad collapsing still run independently.
+
+Important runtime markers: Polish: shared action-pill filter installed and Polish:
+Writing Assistant pill provider removed. Unknown-provider counts are diagnostics only;
+never log composer text or getter-return strings. Host tests cover old/renamed providers,
+immutable input, independent disable switch, ambiguous/throwing getters, empty and
+assistant-only lists. Actual phone validation remains necessary.
+
+
+## 0.5.2 photo sender alignment after hiding Remix
+
+MediaFooterAlignment observes only mediaDetailsContainer with imageRemixCtaButton
+when IMAGE_REMIX is enabled. The sender belongs to descriptionView, an
+ExpandableTextView whose internal text position depends on textMarginBottom.
+After layout, derive that margin from the measured first-line center and the actual
+visible reactionView/reactionViewExtended center in window coordinates. Never use a
+fixed dp offset, translate the entire footer, or move the reaction control.
+
+Only single-line descriptions are adjusted. Multiline captions retain the original
+margin (restored when a reused widget changes from a name-only photo to a caption).
+No message text is read or logged. Geometry tests cover font/density/reaction size,
+window offsets and invalid measurements. APK build and host tests passed; the owner's
+current Viber build still requires visual confirmation. Polish message is unchanged.
+
+
+## 0.5.3 KurViber branding and settings labels
+
+Application label, Viber settings entry and dialog, diagnostic report title and output
+APK name use KurViber. Keep the package, Xposed entry point, preference names and signing
+key unchanged. The application declares no activities; do not add launcher or framework
+settings intents. Its icon is the owner-supplied image in res/drawable-nodpi/ic_module.jpg,
+intentionally included as a public app asset. Original workspace image stays outside Git.
+
+Switch labels are concise feature names without Hide/Disable prefixes. Settings groups
+are Disable (checked removes the named feature) and Enable (More Gear Button, Search FAB
+Action, White Home Icons). Preserve Boolean meanings and saved keys; do not invert any
+preferences to unify presentation. All switches still default to true.

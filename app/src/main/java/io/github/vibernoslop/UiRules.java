@@ -7,6 +7,14 @@ import io.github.vibernoslop.Options.Option;
 final class UiRules {
     static Option id(String name) {
         switch (name) {
+            case "polish_messages_stub":
+            case "options_menu_open_writing_assistant": return POLISH_MESSAGE;
+            case "view_image_remix_cta":
+            case "btn_image_remix_cta":
+            case "btn_image_remix_fab":
+            case "image_remix_fab_container":
+            case "imageRemixView":
+            case "imageRemixCtaButtonContainer": return IMAGE_REMIX;
             case "fab_container": return HIDE_FAB;
             case "folder_tabs": return FOLDERS;
             case "translateButtonView": return TRANSLATE;
@@ -54,6 +62,10 @@ final class UiRules {
             case "post_call_banner_ad_placeholder": case "post_call_native_ad_placeholder":
             case "post_call_native_ad_google_unified_placeholder":
             case "post_call_promotion_ad_placeholder": return ADS_OTHER;
+            case "polish_messages_menu": return POLISH_MESSAGE;
+            case "view_image_remix_cta_button":
+            case "view_image_remix_fab":
+            case "msg_list_image_remix_button": return IMAGE_REMIX;
             case "msg_list_translate_button": return TRANSLATE;
             case "search_chatgpt_carousel_item": return AI;
             default: return null;

@@ -13,24 +13,29 @@ final class Options {
         ANALYTICS("Analytics", true),
         CRASHES("Crashes", true),
         VIBER_EVENTS("Viber Events", true),
-        AI("Ai", true),
+        AI("AI", true),
+        POLISH_MESSAGE("Polish Message", true),
+        IMAGE_REMIX("Remix Image", true),
         TRANSLATE("Translate", true),
         FOLDERS("Folders", true),
         TAB_CHATS("Tab Chats", true),
         TAB_CALLS("Tab Calls", true),
-        TAB_AI("Tab Ai", true),
+        TAB_AI("Tab AI", true),
         TAB_EXPLORE("Tab Explore", true),
         TAB_CONTACTS("Tab Contacts", true),
         TAB_MARKET("Tab Market", true),
         TAB_SHORTS("Tab Shorts", true),
         TAB_PAY("Tab Pay", true),
         TAB_MORE("Tab More", true),
-        MORE_BUTTON("Show gear button for More", true),
-        HIDE_FAB("Hide floating action buttons", true),
-        SEARCH_FAB("Use search button for the current floating action", true),
-        CAMERA("Hide toolbar camera", true),
-        WHITE_HOME_ICONS("White icons on the home screen only", true),
-        NAVBAR("Navbar", true);
+        MORE_BUTTON("More Gear Button", true),
+        HIDE_FAB("Floating Action Buttons", true),
+        SEARCH_FAB("Search FAB Action", true),
+        CAMERA("Toolbar Camera", true),
+        WHITE_HOME_ICONS("White Home Icons", true),
+        NAVBAR("Navigation Bar", true);
+        boolean isEnhancement() {
+            return this == MORE_BUTTON || this == SEARCH_FAB || this == WHITE_HOME_ICONS;
+        }
         final String title;
         final boolean initial;
         Option(String title, boolean initial) { this.title = title; this.initial = initial; }

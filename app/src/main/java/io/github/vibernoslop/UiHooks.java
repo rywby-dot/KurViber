@@ -68,6 +68,7 @@ final class UiHooks {
     static void scan(View view) {
         if (view == null) return;
         String id = name(view);
+        MediaFooterAlignment.observe(view);
         HomeIconColors.apply(view);
         Options.Option option = UiRules.id(id);
         if (option != null && !marked.containsKey(view)) mark(view, option);

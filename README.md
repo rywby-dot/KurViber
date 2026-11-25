@@ -27,7 +27,7 @@
 1. Install the APK from **Releases**
 2. Enable the module in **Vector/LSPosed**, selecting only **Viber** as its scope
 3. Force-stop Viber and reopen it
-4. Open **Viber → Settings → Viber NoSlop**. The gear button opens "More" tab
+4. Open **Viber → Settings → KurViber**. The gear button opens "More" tab
 
 Restart Viber after changing settings. Tested with **Vector 2.2 (3080), Android 17 (Nothing Phone 3, NOS 5, KernelSU-Next, NeoZygisk)**
 

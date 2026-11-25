@@ -19,7 +19,7 @@ public final class XposedModule implements IXposedHookLoadPackage {
                 }
                 Context context = (Context) p.args[0];
                 Options.init(context);
-                HookLog.add("Build 0.4.1 / toolbar diagnostics revision 1");
+                HookLog.add("Build 0.5.3 / toolbar diagnostics revision 1");
                 for (Options.Option option : Options.Option.values()) HookLog.add("Option " + option.name() + "=" + Options.on(option));
                 HookLog.add("Loaded in " + pkg.processName);
                 ClassLoader loader = pkg.classLoader;
@@ -33,6 +33,7 @@ public final class XposedModule implements IXposedHookLoadPackage {
                     safe("UI", () -> UiHooks.install(loader));
                     safe("menus", () -> MenuHooks.install(context, loader));
                     safe("settings", () -> SettingsEntry.install(loader));
+                    safe("Polish action pills", () -> WritingAssistantHooks.install(loader));
                     safe("AI discovery", () -> ExperimentHooks.install(context, loader));
                 }
             }

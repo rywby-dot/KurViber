@@ -16,6 +16,16 @@ public final class UiRulesCheck {
         check(UiRules.layout("conversation_welcome_banner_layout") == null, "do not hide arbitrary banners");
         check(UiRules.id("adButton") == null, "do not hide an arbitrary inner view");
         check(UiRules.id("message") == null && UiRules.layout("fragment_more") == null, "ordinary content preserved");
-        System.out.println("12 UI policy checks passed");
+        check(UiRules.id("polish_messages_stub") == POLISH_MESSAGE, "polish composer root");
+        check(UiRules.layout("polish_messages_menu") == POLISH_MESSAGE, "polish inflated stub layout");
+        check(UiRules.id("options_menu_open_writing_assistant") == POLISH_MESSAGE, "writing assistant menu entry");
+        check(UiRules.id("view_image_remix_cta") == IMAGE_REMIX, "gallery remix include ID override");
+        check(UiRules.id("btn_image_remix_cta") == IMAGE_REMIX, "remix layout root");
+        check(UiRules.layout("view_image_remix_cta_button") == IMAGE_REMIX, "gallery remix layout");
+        check(UiRules.layout("msg_list_image_remix_button") == IMAGE_REMIX, "inline image remix button");
+        check(UiRules.id("image_remix_fab_container") == IMAGE_REMIX, "remix floating action container");
+        check(UiRules.id("imageRemixProgress") == null, "do not target inner progress controls");
+        check(UiRules.layout("fullscreen_gallery_view") == null, "keep actual image viewer");
+        System.out.println("UI policy checks passed");
     }
 }
